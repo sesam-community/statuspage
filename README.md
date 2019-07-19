@@ -1,11 +1,14 @@
 # statuspage
--You can monitor any sesam-node instance (up or down) on statuspage.io using this microservice.
--You can create a docker image and just plug it as system in your node.
+You can monitor any sesam-node instance (up or down) on statuspage.io using this microservice.
+
+You can create a docker image and just plug it as system in your node.
 
 Here , an example of system config for this inside a node.
 
 "SESAM_API_URL", "JWT", "PAGE_ID", "COMPONENT_ID", "API_KEY" : These are required environment variables. 
 
+
+```json
 {
   "_id": "monitoring-node",
   "type": "system:microservice",
@@ -24,3 +27,4 @@ Here , an example of system config for this inside a node.
   "verify_ssl": true
 }
 
+'''
