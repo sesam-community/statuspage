@@ -46,12 +46,14 @@ def get_sesam_node_status():
     try:
         response = requests.get(url=config.SESAM_API_URL + "/health",
                                 headers={'Authorization': 'bearer ' + config.JWT})
-        if response.ok:
-            return next(iter(response.json().values()))
+        if response.status_code == 200:
+            return 'OK'
         else:
             logging.error(f"Non 200 status code from the Sesam api, got: {response.status_code}")
-    except requests.ConnectionError:
-        logging.error(f"Issue while connecting  the SESAM Health api.")
+            return 'NOT OK'
+    except requests.ConnectionError as e:
+        logging.error(f"Issue while connecting  the SESAM Health api {e}.")
+        return 'NOT OK'
 
 
 def update_status_page(status_data):
@@ -74,7 +76,7 @@ def update_status_page(status_data):
 
 def prepare_payload(status_data):
     if status_data is not None:
-        if status_data == 'ok':
+        if status_data == 'OK':
             status_data = 'operational'
         else:
             status_data = 'major_outage'
