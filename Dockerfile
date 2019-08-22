@@ -15,6 +15,6 @@ COPY ./service /service
 
 WORKDIR /service
 
-RUN echo '*  *  *  *  *    /service/monitoringnode.py' > /etc/crontabs/root
+RUN echo '*  *  *  *  * python /service/monitoringnode.py' > /etc/crontabs/root
 CMD crond -l 2 -f
 
