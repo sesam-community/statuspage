@@ -106,7 +106,10 @@ def get_subnodes_status(subnodes):
 def get_subnodes_from_dataset():
         response = requests.get(url=config.SESAM_API_URL + '/api/datasets/config:aggregator-storage-node/entities?deleted=false&history=false',
                                 headers={'Authorization': 'bearer ' + config.JWT})
-        subnodes = [e['_id'] for e in json.loads(response.content)]
+        subnodes = ['microservices']
+        for e in json.loads(response.content):
+            if not e['type'].startswith('system:') and e['type'] != 'metadata':
+                subnodes.append(e['_id'])
         return subnodes
 
 
