@@ -72,7 +72,7 @@ def get_sesam_node_status():
 
 def get_node_type():
     try:
-        response = requests.get(url=config.SESAM_API_URL + '/api/datasets/system:config:aggregator',
+        response = requests.get(url=config.SESAM_API_URL + '/api/datasets/config:aggregator-storage-node',
                                 headers={'Authorization': 'bearer ' + config.JWT})
 
         if response.status_code == 200:
@@ -87,16 +87,16 @@ def get_node_type():
 def get_subnodes_status(subnodes):
     try:
         with requests.session() as session:
+            session.headers = {'Authorization': 'bearer ' + config.JWT}
             problematic_subnodes = []
             for s in subnodes:
                 try:
-                    response = session.get(url="{}/_/{}/api/health".format(config.SESAM_API_URL, s), timeout=180,
-                                       headers={'Authorization': 'bearer ' + config.JWT})
+                    response = session.get(url=f"{config.SESAM_API_URL}/_/{s}/api/health", timeout=180)
                     if response.status_code != 200:
                         problematic_subnodes.append(s)
                 except Exception as e:
                     problematic_subnodes.append(s)
-
+            problematic_subnodes.sort()
             return problematic_subnodes
     except Exception as e:
         logging.error(f"issue when creating connection to check subnodes status{e}")
@@ -104,14 +104,10 @@ def get_subnodes_status(subnodes):
 
 
 def get_subnodes_from_dataset():
-    try:
-        response = requests.get(url=config.SESAM_API_URL + '/api/datasets/system:config:aggregator/entities/apiconfig',
+        response = requests.get(url=config.SESAM_API_URL + '/api/datasets/config:aggregator-storage-node/entities?deleted=false&history=false',
                                 headers={'Authorization': 'bearer ' + config.JWT})
-        subnodes = [e for e in json.loads(response.content)['endpoints']]
+        subnodes = [e['_id'] for e in json.loads(response.content)]
         return subnodes
-
-    except Exception('Problem getting subnodes from system:config:aggregator dataset') as e:
-        raise e
 
 
 def get_sesam_subnodes_status():

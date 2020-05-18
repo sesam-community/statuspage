@@ -17,4 +17,3 @@ WORKDIR /service
 
 RUN echo '*  *  *  *  * python /service/monitoringnode.py' > /etc/crontabs/root
 CMD crond -l 2 -f
-
