@@ -35,5 +35,7 @@ You can also specify some optional environment variables to automatically send e
     "SMTP_HOST": "smtp.office365.com:587",
     "SMTP_PASSWORD": "$SECRET(smpt_password)",
     "SMTP_SENDER": "SesamMailSender@<customer.org>",
-    "SMTP_USERNAME": "SesamMailSender@<customer.org>"
+    "SMTP_USERNAME": "SesamMailSender@<customer.org>",
+    "RECIPIENTS": ["foo@bar.no", "hello@world.xyz"]
+
 ```
